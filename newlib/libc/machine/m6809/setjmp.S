@@ -37,8 +37,8 @@ SAVE_CC = 13
 
 SETJMP_S = 4
 
-.module sjlj
-.area .text
+	.module sjlj
+	.area .text
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
