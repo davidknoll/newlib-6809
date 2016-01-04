@@ -247,7 +247,8 @@ Q5  =  -2.01099218183624371326e-07; /* BE8AFDB7 6E09C32D */
 	        __uint32_t high;
 	        y = one-(e-x);
 		GET_HIGH_WORD(high,y);
-		SET_HIGH_WORD(y,high+(k<<20));	/* add k to y's exponent */
+		high += k << 20;
+		SET_HIGH_WORD(y,high);	/* add k to y's exponent */
 	        return y-one;
 	    }
 	    t = one;
@@ -256,14 +257,16 @@ Q5  =  -2.01099218183624371326e-07; /* BE8AFDB7 6E09C32D */
 	        SET_HIGH_WORD(t,0x3ff00000 - (0x200000>>k));  /* t=1-2^-k */
 	       	y = t-(e-x);
 		GET_HIGH_WORD(high,y);
-		SET_HIGH_WORD(y,high+(k<<20));	/* add k to y's exponent */
+		high += k << 20;
+		SET_HIGH_WORD(y,high);	/* add k to y's exponent */
 	   } else {
 	        __uint32_t high;
 		SET_HIGH_WORD(t,((0x3ff-k)<<20));	/* 2^-k */
 	       	y = x-(e+t);
 	       	y += one;
 		GET_HIGH_WORD(high,y);
-		SET_HIGH_WORD(y,high+(k<<20));	/* add k to y's exponent */
+		high += k << 20;
+		SET_HIGH_WORD(y,high);	/* add k to y's exponent */
 	    }
 	}
 	return y;

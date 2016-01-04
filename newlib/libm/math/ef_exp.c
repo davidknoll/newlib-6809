@@ -89,12 +89,14 @@ P5   =  4.1381369442e-08; /* 0x3331bb4c */
 	if(k >= -125) {
 	    __uint32_t hy;
 	    GET_FLOAT_WORD(hy,y);
-	    SET_FLOAT_WORD(y,hy+(k<<23));	/* add k to y's exponent */
+	    hy += k << 23;
+	    SET_FLOAT_WORD(y,hy);	/* add k to y's exponent */
 	    return y;
 	} else {
 	    __uint32_t hy;
 	    GET_FLOAT_WORD(hy,y);
-	    SET_FLOAT_WORD(y,hy+((k+100)<<23));	/* add k to y's exponent */
+	    hy += (k + 100) << 23;
+	    SET_FLOAT_WORD(y,hy);	/* add k to y's exponent */
 	    return y*twom100;
 	}
 }

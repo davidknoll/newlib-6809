@@ -104,7 +104,8 @@ G =  3.57142857142857150787e-01; /* 5/14      = 0x3FD6DB6D, 0xB6DB6DB7 */
 
     /* chopped to 20 bits and make it larger than cbrt(x) */ 
 	GET_HIGH_WORD(high,t);
-	INSERT_WORDS(t,high+0x00000001,0);
+	high += 0x00000001;
+	INSERT_WORDS(t,high,0);
 
 
     /* one step newton iteration to 53 bits with error less than 0.667 ulps */

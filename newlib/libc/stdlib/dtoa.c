@@ -232,6 +232,7 @@ _DEFUN (_dtoa_r,
   _Bigint *b, *b1, *delta, *mlo = NULL, *mhi, *S;
   double ds;
   char *s, *s0;
+  __uint32_t exp_hack;
 
   d.d = _d;
 
@@ -345,7 +346,11 @@ _DEFUN (_dtoa_r,
        : (word1 (d) << (32 - i));
 #endif
       d2.d = x;
-      word0 (d2) -= 31 * Exp_msk1;	/* adjust exponent */
+      //
+      exp_hack = word0 (d2);
+      exp_hack -= 31 * Exp_msk1;
+      word0 (d2) = exp_hack;	/* adjust exponent */
+      //
       i -= (Bias + (P - 1) - 1) + 1;
       denorm = 1;
     }
@@ -478,7 +483,11 @@ _DEFUN (_dtoa_r,
 	  ieps++;
 	}
       eps.d = ieps * d.d + 7.;
-      word0 (eps) -= (P - 1) * Exp_msk1;
+      //
+      exp_hack = word0 (eps);
+      exp_hack -= (P - 1) * Exp_msk1;
+      word0 (eps) = exp_hack;
+      //
       if (ilim == 0)
 	{
 	  S = mhi = 0;

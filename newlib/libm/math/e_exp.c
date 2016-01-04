@@ -154,12 +154,14 @@ P5   =  4.13813679705723846039e-08; /* 0x3E663769, 0x72BEA4D0 */
 	if(k >= -1021) {
 	    __uint32_t hy;
 	    GET_HIGH_WORD(hy,y);
-	    SET_HIGH_WORD(y,hy+(k<<20));	/* add k to y's exponent */
+	    hy += k << 20;
+	    SET_HIGH_WORD(y,hy);	/* add k to y's exponent */
 	    return y;
 	} else {
 	    __uint32_t hy;
 	    GET_HIGH_WORD(hy,y);
-	    SET_HIGH_WORD(y,hy+((k+1000)<<20));	/* add k to y's exponent */
+	    hy += (k + 1000) << 20;
+	    SET_HIGH_WORD(y,hy);	/* add k to y's exponent */
 	    return y*twom1000;
 	}
 }

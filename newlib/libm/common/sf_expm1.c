@@ -108,7 +108,8 @@ Q5  =  -2.0109921195e-07; /* 0xb457edbb */
 	        __int32_t i;
 	        y = one-(e-x);
 		GET_FLOAT_WORD(i,y);
-		SET_FLOAT_WORD(y,i+(k<<23));	/* add k to y's exponent */
+		i += k << 23;
+		SET_FLOAT_WORD(y,i);	/* add k to y's exponent */
 	        return y-one;
 	    }
 	    t = one;
@@ -117,14 +118,16 @@ Q5  =  -2.0109921195e-07; /* 0xb457edbb */
 	        SET_FLOAT_WORD(t,0x3f800000 - (0x1000000>>k)); /* t=1-2^-k */
 	       	y = t-(e-x);
 		GET_FLOAT_WORD(i,y);
-		SET_FLOAT_WORD(y,i+(k<<23));	/* add k to y's exponent */
+		i += k << 23;
+		SET_FLOAT_WORD(y,i);	/* add k to y's exponent */
 	   } else {
 	        __int32_t i;
 		SET_FLOAT_WORD(t,((0x7f-k)<<23));	/* 2^-k */
 	       	y = x-(e+t);
 	       	y += one;
 		GET_FLOAT_WORD(i,y);
-		SET_FLOAT_WORD(y,i+(k<<23));	/* add k to y's exponent */
+		i += k << 23;
+		SET_FLOAT_WORD(y,i);	/* add k to y's exponent */
 	    }
 	}
 	return y;

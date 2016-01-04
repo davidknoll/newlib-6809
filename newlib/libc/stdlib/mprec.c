@@ -912,6 +912,7 @@ _DEFUN (ratio, (a, b), _Bigint * a _AND _Bigint * b)
 {
   union double_union da, db;
   int k, ka, kb;
+  __uint32_t exp_hack;
 
   da.d = b2d (a, &ka);
   db.d = b2d (b, &kb);
@@ -936,11 +937,21 @@ _DEFUN (ratio, (a, b), _Bigint * a _AND _Bigint * b)
     }
 #else
   if (k > 0)
-    word0 (da) += k * Exp_msk1;
+    {
+      //
+      exp_hack = word0 (da);
+      exp_hack += k * Exp_msk1;
+      word0 (da) = exp_hack;
+      //
+    }
   else
     {
       k = -k;
-      word0 (db) += k * Exp_msk1;
+      //
+      exp_hack = word0 (db);
+      exp_hack += k * Exp_msk1;
+      word0 (db) = exp_hack;
+      //
     }
 #endif
   return da.d / db.d;
