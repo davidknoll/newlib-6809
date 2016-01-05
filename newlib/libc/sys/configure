@@ -754,6 +754,7 @@ CPPFLAGS'
 ac_subdirs_all='a29khif
 arc
 arm
+assist09
 coco
 d10v
 decstation
@@ -766,6 +767,7 @@ mmixware
 netware
 rdos
 rtems
+sbug
 sh
 sparc64
 sun4
@@ -5716,6 +5718,8 @@ subdirs="$subdirs a29khif"
  ;;
 	arm) subdirs="$subdirs arm"
  ;;
+	assist09) subdirs="$subdirs assist09"
+ ;;
 	coco) subdirs="$subdirs coco"
  ;;
 	d10v) subdirs="$subdirs d10v"
@@ -5739,6 +5743,8 @@ subdirs="$subdirs a29khif"
 	rdos) subdirs="$subdirs rdos"
  ;;
 	rtems) subdirs="$subdirs rtems"
+ ;;
+	sbug) subdirs="$subdirs sbug"
  ;;
 	sh) subdirs="$subdirs sh"
  ;;

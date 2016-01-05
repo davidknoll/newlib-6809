@@ -429,14 +429,22 @@ case "${host}" in
 	##newlib_cflags="${newlib_cflags} -I`newlib-flags --kernel-dir`/include"
 	##newlib_cflags="${newlib_cflags} -idirafter ${gcc_dir}include"
 	;;
+  m6809-assist09-*)
+	sys_dir=assist09
+	have_crt0="yes"
+	;;
+  m6809-sbug-*)
+	sys_dir=sbug
+	have_crt0="yes"
+	;;
   m6809-coco-*)
-   sys_dir=coco
+	sys_dir=coco
 	have_crt0="no"
-   ;;
+	;;
   m6809-*-*)
-   sys_dir=m6809sim
+	sys_dir=m6809sim
 	have_crt0="no"
-   ;;
+	;;
   m68hc11-*-*|m6811-*-*|m6812-*-*|m68hc12-*-*)
 	;;
 
