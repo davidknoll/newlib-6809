@@ -1,8 +1,22 @@
-;      .title CRT0 for newlib on SBUG/ASSIST09
+;      .title CRT0 for newlib on ASSIST09
 ;      .sbttl David's 6309-6829 SBC
        .module crt0
        ; Based on the one in gcc6809
        ; Tries to be position-independent, but not quite
+
+; ASSIST09 function numbers
+INCHP  =      0        ; Obtain input character
+OUTCH  =      1        ; Output a character
+PDATA1 =      2        ; Send string
+PDATA  =      3        ; Send new line and string
+OUT2HS =      4        ; Convert byte to hex
+OUT4HS =      5        ; Convert word to hex
+PCRLF  =      6        ; Output to next line
+SPACE  =      7        ; Send space
+MONITR =      8        ; Fireup ASSIST09
+VCTRSW =      9        ; Vector swap
+BRKPT  =      10       ; User breakpoint
+PAUSE  =      11       ; Program break and check
 
 ; Declare linker sections
        .bank  prog
@@ -37,10 +51,10 @@ __start:
        ;; Zero the BSS
        leax   s_.bss,pcr
        ldy    #l_.bss
-bsslp:
-       clr    ,x+
+bsslp: clr    ,x+
        leay   -1,y
        bne    bsslp
+       sts    entsp,pcr
 
        ;; Call any "initializer" functions
        leau   s_.ctors,pcr
@@ -73,6 +87,17 @@ argdn:
        lbsr   _main
        leas   4,s
 
+       ;; If main returns, then invoke exit() to stop the program
+       ;; The C library doesn't support -mdret yet, so move the
+       ;; argument first.
+#ifdef __DRET__
+       tfr    d,x
+#endif
+       lbra   _exit
+
+; void __attribute__((noreturn)) _exit(int status)
+       .globl __exit
+__exit:
        ;; Call any finalizer functions
        leau   s_.dtors,pcr
        pshs   x,d
@@ -85,18 +110,21 @@ __dtors_loop:
 __dtors_done:
        puls   d,x
 
-       ;; If main returns, then invoke exit() to stop the program
-       ;; The C library doesn't support -mdret yet, so move the
-       ;; argument first.
-#ifdef __DRET__
-       tfr    d,x
-#endif
-       lbsr   _exit
+       ;; Exit to ASSIST09
+       lds    entsp,pcr
+       lda    #1
+       swi
+       .db    MONITR
+       ;; Halt, in case the monitor tries to continue
+       bra    .
 
        .area  .data
 ; char *argv[0]
 argv0: .strz  "crt0"
+
        .area  .bss
+entsp: .ds    1*2
+
 ; char *argv[]
 argv:  .ds    2*2
 ; char **environ / char *envp[]
@@ -104,7 +132,7 @@ argv:  .ds    2*2
 _environ:
        .ds    1*2
 
-; Don't emit vectors, this is a "user mode" program
+; Don't emit vectors, this isn't a ROM-based program
        .area  vector
 
        .end   __start

@@ -18,14 +18,6 @@ PAUSE  =      11       ; Program break and check
 
        .area  .text
 
-; void _exit(int status)
-       .globl __exit
-__exit:
-       tfr    x,d
-       swi
-       .db    BRKPT
-       bra    __exit
-
 ; void seroutb(const unsigned char c)
        .globl _seroutb
 _seroutb:
